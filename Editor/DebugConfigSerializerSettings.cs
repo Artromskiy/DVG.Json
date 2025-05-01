@@ -1,5 +1,5 @@
 ﻿#if UNITY_EDITOR
-using DVG.Core.Ids;
+using DVG.Core;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
