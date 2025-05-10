@@ -27,8 +27,10 @@ namespace DVG.Json.Editor
         private class CustomEnumConverter : StringEnumConverter
         {
             private readonly HashSet<int> _enumsSet = new();
-            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+            public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
             {
+                if (value == null)
+                    return;
                 Type enumType = value.GetType();
                 Enum castedValue = (Enum)value;
 
