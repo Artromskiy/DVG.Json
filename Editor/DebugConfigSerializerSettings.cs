@@ -1,4 +1,5 @@
-﻿#if UNITY_EDITOR
+﻿#nullable enable
+#if UNITY_EDITOR
 using DVG.Core;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -12,7 +13,7 @@ namespace DVG.Json.Editor
 {
     internal class DebugConfigSerializerSettings : JsonSerializerSettings
     {
-        private static DebugConfigSerializerSettings _instance;
+        private static DebugConfigSerializerSettings? _instance;
         public static DebugConfigSerializerSettings Instance => _instance ??= new DebugConfigSerializerSettings();
         private DebugConfigSerializerSettings()
         {
@@ -58,14 +59,14 @@ namespace DVG.Json.Editor
                 if (property.PropertyType == typeof(string))
                     property.ShouldSerialize = ins => !string.IsNullOrEmpty(GetValue(ins, member) as string);
                 else if (typeof(IStringId).IsAssignableFrom(property.PropertyType))
-                    property.ShouldSerialize = ins => !string.IsNullOrEmpty((GetValue(ins, member) as IStringId).Value);
+                    property.ShouldSerialize = ins => !string.IsNullOrEmpty((GetValue(ins, member) as IStringId)?.Value);
                 else if (typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
                     property.ShouldSerialize = ins => GetValue(ins, member) is IEnumerable enumerable && enumerable.GetEnumerator().MoveNext();
 
                 return property;
             }
 
-            private object GetValue(object ins, MemberInfo member) => member.MemberType switch
+            private object? GetValue(object ins, MemberInfo member) => member.MemberType switch
             {
                 MemberTypes.Property => GetPropertyValue(ins, member.Name),
                 MemberTypes.Field => GetFieldValue(ins, member.Name),
@@ -74,8 +75,8 @@ namespace DVG.Json.Editor
 
             private const BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
-            private object GetPropertyValue(object instance, string memberName) => instance.GetType().GetProperty(memberName, bindingFlags)?.GetValue(instance, null);
-            private object GetFieldValue(object instance, string memberName) => instance.GetType().GetField(memberName, bindingFlags)?.GetValue(instance);
+            private object? GetPropertyValue(object instance, string memberName) => instance.GetType().GetProperty(memberName, bindingFlags)?.GetValue(instance, null);
+            private object? GetFieldValue(object instance, string memberName) => instance.GetType().GetField(memberName, bindingFlags)?.GetValue(instance);
         }
     }
 }
