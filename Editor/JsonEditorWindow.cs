@@ -1,3 +1,4 @@
+#nullable enable
 #if UNITY_EDITOR
 using Newtonsoft.Json;
 using System;
@@ -16,11 +17,11 @@ namespace DVG.Json.Editor
         private string JsonGuid => AssetDatabase.AssetPathToGUID(JsonPath);
         private bool IsCompatible => JsonPath.EndsWith(".json");
 
-        private readonly List<Type> _jsonAssetTypes = new();
+        private readonly List<Type?> _jsonAssetTypes = new();
         private readonly List<string> _jsonAssetNames = new();
         private readonly List<Type> _wrapperTypes = new();
 
-        private IScriptableWrapper _objectWrapper;
+        private IScriptableWrapper? _objectWrapper;
         private int _selectedTypeIndex = 0;
 
 
@@ -109,7 +110,7 @@ namespace DVG.Json.Editor
             _wrapperTypes.AddRange(wrapperTypes);
         }
 
-        private IScriptableWrapper CreateWrapper()
+        private IScriptableWrapper? CreateWrapper()
         {
             if (string.IsNullOrWhiteSpace(JsonPath) || !File.Exists(JsonPath))
                 return null;
@@ -128,12 +129,12 @@ namespace DVG.Json.Editor
                 return null;
             }
 
-            var wrapper = CreateInstance(found) as IScriptableWrapper;
+            var wrapper = (IScriptableWrapper)CreateInstance(found);
             var json = File.ReadAllText(JsonPath);
-            object content = null;
+            object? content = null;
             try
             {
-                content = JsonConvert.DeserializeObject(json, type);
+                content = JsonConvert.DeserializeObject(json, type!);
                 wrapper.Value = content;
             }
             catch { }

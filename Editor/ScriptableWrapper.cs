@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+#nullable enable
 using System;
 using UnityEditor;
 using UnityEngine;
@@ -11,8 +12,8 @@ namespace DVG.Json.Editor
         [SerializeField]
         private T _value;
 
-        private SerializedObject _serializedObject;
-        private SerializedProperty _serializedProperty;
+        private SerializedObject? _serializedObject;
+        private SerializedProperty? _serializedProperty;
 
         public T Value
         {
@@ -27,10 +28,10 @@ namespace DVG.Json.Editor
         private SerializedObject SerializedObject => _serializedObject ??= new SerializedObject(this);
         private SerializedProperty SerializedProperty => _serializedProperty ??= SerializedObject.FindProperty(nameof(_value));
 
-        object IScriptableWrapper.Value
+        object? IScriptableWrapper.Value
         {
             get => Value;
-            set => Value = ((T)value) ?? Value;
+            set => Value = ((T?)value) ?? Value;
         }
 
         public bool Draw(string name)
@@ -44,7 +45,7 @@ namespace DVG.Json.Editor
     public interface IScriptableWrapper
     {
         bool Draw(string name);
-        object Value { get; set; }
+        object? Value { get; set; }
     }
 }
 #endif
