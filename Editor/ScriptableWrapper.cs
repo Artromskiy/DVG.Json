@@ -1,5 +1,5 @@
-﻿#if UNITY_EDITOR
-#nullable enable
+﻿#nullable enable
+#if UNITY_EDITOR
 using System;
 using UnityEditor;
 using UnityEngine;
@@ -10,7 +10,7 @@ namespace DVG.Json.Editor
     public class JsonWrapper<T> : ScriptableObject, IScriptableWrapper
     {
         [SerializeField]
-        private T _value;
+        private T _value = default!;
 
         private SerializedObject? _serializedObject;
         private SerializedProperty? _serializedProperty;
